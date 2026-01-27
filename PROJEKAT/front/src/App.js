@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import AddEmployee from "./pages/AddEmployee";
+import Navbar from "./components/NavBar";
+import { useState } from "react";
+
+
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!sessionStorage.getItem("token"),
+  );
+
+  const checkAuth = () => {
+    setIsAuthenticated(!!sessionStorage.getItem("token"));
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <main>
+          {isAuthenticated && (
+            <Navbar onLogout={() => setIsAuthenticated(false)} />
+          )}
+          <Routes>
+            <Route path="/" element={<Login onLoginSuccess={checkAuth} />} />
+            <Route
+              path="/register"
+              element={<Register onRegisterSuccess={checkAuth} />}
+            />
+            <Route path="/add-employee" element={<AddEmployee />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 
