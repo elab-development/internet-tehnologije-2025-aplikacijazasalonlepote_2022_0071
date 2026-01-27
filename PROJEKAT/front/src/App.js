@@ -9,6 +9,8 @@ import Register from "./pages/Register";
 import AddEmployee from "./pages/AddEmployee";
 import Navbar from "./components/NavBar";
 import { useState } from "react";
+import ServicesList from "./pages/ServicesList";
+
 
 
 
@@ -34,6 +36,8 @@ function App() {
               element={<Register onRegisterSuccess={checkAuth} />}
             />
             <Route path="/add-employee" element={<AddEmployee />} />
+            <Route path="/services" element={<ServicesList />} />
+
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
