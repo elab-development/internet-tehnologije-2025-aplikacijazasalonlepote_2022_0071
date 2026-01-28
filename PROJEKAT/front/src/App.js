@@ -11,7 +11,7 @@ import Navbar from "./components/NavBar";
 import { useState } from "react";
 import ServicesList from "./pages/ServicesList";
 import EditService from "./pages/EditService";
-
+import CreateService from "./pages/CreateService";
 
 
 
@@ -39,6 +39,7 @@ function App() {
             <Route path="/add-employee" element={<AddEmployee />} />
             <Route path="/services" element={<ServicesList />} />
             <Route path="/services/edit" element={<EditService />} />
+             <Route path="/create-service" element={<CreateService />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

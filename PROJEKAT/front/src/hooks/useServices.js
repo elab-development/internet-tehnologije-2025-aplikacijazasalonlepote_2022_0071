@@ -54,6 +54,25 @@ export const useServices = (initialFilters) => {
     setFilters({ ...filters, page });
   };
 
+
+    const createService = async (serviceData) => {
+    setLoading(true);
+    try {
+      const response = await api.post("/vlasnica/usluge", serviceData);
+      return { success: true, message: response.data.message };
+    } catch (err) {
+      const errorMsg =
+        Object.values(err.response?.data?.errors || {})[0]?.[0] ||
+        err.response?.data?.message ||
+        "Došlo je do greške prilikom kreiranja usluge.";
+      return { success: false, message: errorMsg };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
   const updateService = async (id, formData) => {
     setLoading(true);
     try {
@@ -82,6 +101,7 @@ export const useServices = (initialFilters) => {
     setFilters,
     handleFilterChange,
     handlePageChange,
+    createService,
     updateService
   };
 };
