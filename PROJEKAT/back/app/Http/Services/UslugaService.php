@@ -2,7 +2,8 @@
 
 namespace App\Http\Services;
 use App\Models\User;
-use App\Models\Usluga;
+use App\Models\Usluga; 
+use App\Models\UslugaIzmena; 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Exception;
 
@@ -44,6 +45,36 @@ class UslugaService
         }
 
         return $query->paginate(9);
+    }
+
+
+       public function procesuirajIzmenu(int $uslugaId, array $data, User $user)
+    {
+        if ($user->isVlasnica()) {
+            $usluga = Usluga::findOrFail($uslugaId);
+            $usluga->update($data);
+            return ['status' => 'izvrseno', 'data' => $usluga];
+        }
+
+        
+
+        $imaPrisustvo = $user->zaposleni->usluge()
+        ->where('usluga_id', $uslugaId)
+        ->exists();
+
+        if (!$imaPrisustvo) {
+            throw new Exception("Nemate ovlašćenje da predlažete izmene za uslugu koju ne obavljate.");
+        }
+
+
+        $izmena = UslugaIzmena::create([
+            'usluga_id' => $uslugaId,
+            'user_id' => $user->id,
+            'novi_podaci' => $data,
+            'status' => 'na_cekanju'
+        ]);
+
+        return ['status' => 'predlog_kreiran', 'data' => $izmena];
     }
 
    
