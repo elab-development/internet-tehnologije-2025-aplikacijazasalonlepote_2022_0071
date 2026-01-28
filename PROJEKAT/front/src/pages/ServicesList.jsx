@@ -5,11 +5,12 @@ import ServiceHeader from "../components/ServiceHeader";
 import ServiceCard from "../components/ServiceCard";
 import Pagination from "../components/Pagination";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 
 const ServicesList = () => {
   const { getUserData } = useAuth();
-
+  const navigate = useNavigate();
   const user = getUserData();
 
   const {
@@ -36,7 +37,8 @@ const ServicesList = () => {
   };
 
   const handleAction = (service) => {
-    console.log("Service action triggered for:", service);
+     if (user.type === "vlasnica") 
+      navigate(`/services/edit`, { state: { service } });
   };
 
   return (

@@ -54,6 +54,23 @@ export const useServices = (initialFilters) => {
     setFilters({ ...filters, page });
   };
 
+  const updateService = async (id, formData) => {
+    setLoading(true);
+    try {
+      const data = new FormData();
+      Object.keys(formData).forEach((key) => data.append(key, formData[key]));
+      data.append("_method", "PUT");
+
+      const response = await api.post(`/usluge/${id}`, data);
+      return { success: true, message: response.data.message };
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || "Greška pri ažuriranju";
+      return { success: false, message: errorMsg };
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return {
     services,
@@ -65,5 +82,6 @@ export const useServices = (initialFilters) => {
     setFilters,
     handleFilterChange,
     handlePageChange,
+    updateService
   };
 };

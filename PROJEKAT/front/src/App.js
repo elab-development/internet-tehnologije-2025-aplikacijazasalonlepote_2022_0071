@@ -10,6 +10,7 @@ import AddEmployee from "./pages/AddEmployee";
 import Navbar from "./components/NavBar";
 import { useState } from "react";
 import ServicesList from "./pages/ServicesList";
+import EditService from "./pages/EditService";
 
 
 
@@ -37,7 +38,7 @@ function App() {
             />
             <Route path="/add-employee" element={<AddEmployee />} />
             <Route path="/services" element={<ServicesList />} />
-
+            <Route path="/services/edit" element={<EditService />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
