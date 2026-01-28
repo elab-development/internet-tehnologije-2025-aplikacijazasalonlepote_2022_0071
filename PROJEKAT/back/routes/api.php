@@ -15,6 +15,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/usluge', [UslugaController::class, 'index']);
         Route::put('/usluge/{id}', [UslugaController::class, 'update']);
 
+         Route::prefix('vlasnica')->group(function () {
+          Route::post('/usluge', [UslugaController::class, 'store']);
+         });
+
 });
 
 

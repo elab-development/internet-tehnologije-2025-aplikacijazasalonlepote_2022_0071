@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\UslugaFilterRequest;
 use App\Http\Requests\UpdateUslugaRequest;
+use App\Http\Requests\UslugaRequest;
 use App\Http\Resources\UslugaResource;
 use App\Http\Services\UslugaService;
 use App\Http\Services\UslugaOdobravanjeService;
@@ -66,6 +67,26 @@ class UslugaController extends Controller
     }
 
 
+    
+    public function store(UslugaRequest $request)
+    {
+        try {
+            $usluga = $this->uslugaService->createUsluga($request->validated());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Usluga je uspešno kreirana.',
+                'data' =>  new UslugaResource($usluga)
+            ], 201);
+            
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Došlo je do greške prilikom kreiranja usluge.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
 
 }

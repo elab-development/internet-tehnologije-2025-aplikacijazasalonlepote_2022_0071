@@ -77,5 +77,10 @@ class UslugaService
         return ['status' => 'predlog_kreiran', 'data' => $izmena];
     }
 
+
+     public function createUsluga(array $data): Usluga
+    {
+        return Usluga::create($data);
+    }
    
 }
