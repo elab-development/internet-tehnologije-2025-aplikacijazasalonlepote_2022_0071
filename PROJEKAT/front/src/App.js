@@ -12,7 +12,7 @@ import { useState } from "react";
 import ServicesList from "./pages/ServicesList";
 import EditService from "./pages/EditService";
 import CreateService from "./pages/CreateService";
-
+import EmployeesList from "./pages/EmployeesList";
 
 
 function App() {
@@ -40,6 +40,7 @@ function App() {
             <Route path="/services" element={<ServicesList />} />
             <Route path="/services/edit" element={<EditService />} />
              <Route path="/create-service" element={<CreateService />} />
+              <Route path="/employees" element={<EmployeesList />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
