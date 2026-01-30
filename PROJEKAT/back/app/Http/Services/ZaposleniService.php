@@ -40,4 +40,19 @@ class ZaposleniService
 
         return $query->paginate($filters['per_page'] ?? 10);
     }
+
+
+
+       public function syncUsluge(int $userId, array $uslugaIds)
+    {
+        $zaposleni = Zaposleni::findOrFail($userId);
+        return $zaposleni->usluge()->sync($uslugaIds);
+    }
+
+    public function getUslugeZaposlenog(int $userId)
+    {
+        return Zaposleni::with('usluge')->findOrFail($userId)->usluge;
+    }
+
+
 }
