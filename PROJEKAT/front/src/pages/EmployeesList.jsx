@@ -5,6 +5,7 @@ import EmployeeCard from "../components/EmployeeCard";
 import Pagination from "../components/Pagination";
 import FormInput from "../components/FormInput";
 import FormSelect from "../components/FormSelect";
+import EmployeeServicesModal from "../components/EmployeeServicesModal";
 import { useNavigate } from "react-router-dom";
 
 const EmployeesList = () => {
@@ -14,6 +15,8 @@ const EmployeesList = () => {
     loading,
     filters,
     setFilters,
+    setSelectedEmployee,
+    selectedEmployee,
     searchIme,
     searchPrezime,
     handleFilterChange,
@@ -40,9 +43,6 @@ const EmployeesList = () => {
             <p className="text-gray-500 italic">
               Upravljajte zaposlenima i njihovim performansama
             </p>
-          </div>
-          <div className="lg:hidden">
-            <Button className="!rounded-full px-6">+ NOVI</Button>
           </div>
         </div>
 
@@ -107,11 +107,17 @@ const EmployeesList = () => {
               <EmployeeCard
                 key={emp.id}
                 employee={emp}
+                 onViewServices={() => setSelectedEmployee(emp)}
               />
             ))}
           </div>
 
-          
+           {selectedEmployee && (
+            <EmployeeServicesModal
+              employee={selectedEmployee}
+              onClose={() => setSelectedEmployee(null)}
+            />
+          )}
 
           <Pagination
             meta={meta}

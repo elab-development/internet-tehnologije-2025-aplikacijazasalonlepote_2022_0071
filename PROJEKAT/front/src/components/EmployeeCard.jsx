@@ -1,6 +1,6 @@
 import React from "react";
-
-const EmployeeCard = ({ employee }) => {
+import Button from "./Button";
+const EmployeeCard = ({ employee,onViewServices }) => {
   return (
     <div className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-pink-50 flex flex-col items-center text-center hover:shadow-2xl transition-all group">
       <div className="w-24 h-24 bg-gradient-to-tr from-pink-800 to-rose-400 rounded-full flex items-center justify-center text-white text-3xl font-serif mb-6 shadow-lg group-hover:scale-110 transition-transform">
@@ -42,7 +42,14 @@ const EmployeeCard = ({ employee }) => {
         </div>
       </div>
 
-   
+    <Button
+        variant="outline"
+        fullWidth
+        onClick={onViewServices}
+        className="mt-auto !rounded-2xl border-pink-200 text-pink-800 hover:bg-pink-50"
+      >
+        USLUGE
+      </Button>
     </div>
   );
 };

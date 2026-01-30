@@ -5,7 +5,7 @@ export const useEmployees = (initialFilters) => {
   const [employees, setEmployees] = useState([]);
   const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
-
+ const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchIme, setSearchIme] = useState("");
   const [searchPrezime, setSearchPrezime] = useState("");
 
@@ -50,7 +50,36 @@ export const useEmployees = (initialFilters) => {
     else setFilters((prev) => ({ ...prev, [name]: value, page: 1 }));
   };
 
- 
+   const getEmployeeServices = async (employeeId) => {
+    try {
+      const response = await api.get(
+        `/vlasnica/zaposleni/${employeeId}/usluge`,
+      );
+      return response.data.data;
+    } catch (err) {
+      console.error("Greška pri dobavljanju usluga zaposlenog");
+      return [];
+    }
+  };
+
+  const updateEmployeeServices = async (employeeId, serviceIds) => {
+    setLoading(true);
+    try {
+      const payload = {
+        user_id: employeeId,
+        usluge: serviceIds,
+      };
+      await api.post("/vlasnica/zaposleni/usluge", payload);
+      return { success: true, message: "Usluge su uspešno ažurirane!" };
+    } catch (err) {
+      return {
+        success: false,
+        message: err.response?.data?.message || "Greška pri čuvanju usluga.",
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   return {
@@ -62,6 +91,10 @@ export const useEmployees = (initialFilters) => {
     searchIme,
     searchPrezime,
     handleFilterChange,
+     getEmployeeServices,
+    updateEmployeeServices,
+      selectedEmployee,
+    setSelectedEmployee,
     refresh: fetchEmployees,
     
 
