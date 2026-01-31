@@ -6,6 +6,8 @@ import ServiceCard from "../components/ServiceCard";
 import Pagination from "../components/Pagination";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useBookings } from "../hooks/useBookings";
+import BookingModal from "../components/BookingModal";
 
 
 const ServicesList = () => {
@@ -30,7 +32,7 @@ const ServicesList = () => {
   });
 
 
-
+ const { selectedService, setSelectedService } = useBookings();
   const getButtonProps = () => {
     if (user.type === "vlasnica") return "IZMENI";
     else if (user.type === "klijent") return "ZAKAZI";
@@ -39,6 +41,9 @@ const ServicesList = () => {
   const handleAction = (service) => {
      if (user.type === "vlasnica") 
       navigate(`/services/edit`, { state: { service } });
+    else {
+      setSelectedService(service);
+    }
   };
 
   return (
@@ -69,6 +74,12 @@ const ServicesList = () => {
             ))}
           </div>
 
+             {selectedService && (
+            <BookingModal
+              service={selectedService}
+              onClose={() => setSelectedService(null)}
+            />
+          )}
 
           <Pagination meta={meta} onPageChange={handlePageChange} />
         </>
