@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UslugaController;
 use App\Http\Controllers\ZaposleniController;
 use App\Http\Controllers\ZaposleniUslugaController;
+use App\Http\Controllers\RezervacijaController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -16,6 +17,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/usluge', [UslugaController::class, 'index']);
         Route::put('/usluge/{id}', [UslugaController::class, 'update']);
+        Route::get('/rezervacije/slobodni-termini', [RezervacijaController::class, 'getTermini']);
+
 
          Route::prefix('vlasnica')->group(function () {
           Route::post('/usluge', [UslugaController::class, 'store']);
