@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Services\RezervacijaService;
+use App\Http\Services\RezervacijaManager;
+use App\Http\Requests\StoreRezervacijaRequest;
+use App\Http\Resources\RezervacijaResource;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -11,11 +14,13 @@ class RezervacijaController extends Controller
 {
 
       protected $rezervacijaService;
+      protected $manager;
       
 
-      public function __construct(RezervacijaService $rezervacijaService)
+      public function __construct(RezervacijaService $rezervacijaService, RezervacijaManager $manager)
 {
     $this->rezervacijaService = $rezervacijaService;
+    $this->manager = $manager;
     
    
 }
@@ -44,6 +49,21 @@ class RezervacijaController extends Controller
 
 
 
+    public function store(StoreRezervacijaRequest $request)
+{
+    try {
+        $rezervacija = $this->manager->zakazi($request->validated(), Auth::user());
+        return new RezervacijaResource($rezervacija);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Termin više nije dostupan ili je došlo do greške.',
+            'error' => $e->getMessage()
+        ], 422); 
+    }
+    
+}
     
 
 }
