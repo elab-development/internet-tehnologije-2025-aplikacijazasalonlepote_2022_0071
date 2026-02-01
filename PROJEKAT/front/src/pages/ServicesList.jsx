@@ -8,17 +8,20 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useBookings } from "../hooks/useBookings";
 import BookingModal from "../components/BookingModal";
-
+import Button from "../components/Button";
 
 const ServicesList = () => {
   const { getUserData } = useAuth();
   const navigate = useNavigate();
   const user = getUserData();
+  const isEmployee = ["sminkerka", "manikirka"].includes(user.type);
 
   const {
     services,
     meta,
     loading,
+     activeTab,
+    setActiveTab,
     absoluteMaxPrice,
     filters,
     handleFilterChange,
@@ -48,14 +51,37 @@ const ServicesList = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-     
-     
+       {isEmployee && (
+        <div className="flex gap-4 mb-6 bg-white p-2 rounded-2xl w-fit shadow-sm border border-pink-50">
+          {["all", "mine"].map((tab) => (
+            <Button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              variant={activeTab === tab ? "default" : "outline"}
+              className={`!rounded-xl !px-6 !py-2 !text-sm !font-bold !border-none ${
+                activeTab !== tab ? "!text-gray-400 hover:!text-pink-800" : ""
+              }`}
+            >
+              {tab === "all" ? "Sve usluge" : "Moje usluge"}
+            </Button>
+          ))}
+        </div>
+      )}
+
+      {activeTab === "all" ? (
         <ServiceHeader
           filters={filters}
           onFilterChange={handleFilterChange}
           maxPrice={absoluteMaxPrice}
         />
-      
+      ) : (
+        <div className="mb-10 bg-white p-10 rounded-[2rem] border border-pink-50 shadow-sm">
+          <h1 className="text-3xl font-serif text-pink-900">Moji Tretmani</h1>
+          <p className="text-gray-400 italic">
+            Lista usluga koje vi obavljate u salonu
+          </p>
+        </div>
+      )}
 
       {loading ? (
         <div className="flex justify-center py-20 animate-pulse">

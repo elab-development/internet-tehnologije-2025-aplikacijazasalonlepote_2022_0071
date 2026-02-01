@@ -7,13 +7,17 @@ export const useServices = (initialFilters) => {
   const [loading, setLoading] = useState(true);
   const [absoluteMaxPrice, setAbsoluteMaxPrice] = useState(0);
   const [filters, setFilters] = useState(initialFilters);
+  const [activeTab, setActiveTab] = useState("all");
 
   const fetchServices = async () => {
     setLoading(true);
     try {
       let response;
-      
+        if (activeTab === "mine") {
+        response = await api.get("zaposleni/moje-usluge");
+      } else {
         response = await api.get("/usluge", { params: filters });
+      }
       
 
       const data = response.data.data;
@@ -29,7 +33,7 @@ export const useServices = (initialFilters) => {
   useEffect(() => {
     const timer = setTimeout(fetchServices, 500);
     return () => clearTimeout(timer);
-  }, [filters]);
+  }, [filters,activeTab]);
 
   useEffect(() => {
     if (services.length > 0) {
@@ -97,6 +101,8 @@ export const useServices = (initialFilters) => {
     loading,
     absoluteMaxPrice,
     filters,
+    activeTab,
+    setActiveTab,
     fetchServices,
     setFilters,
     handleFilterChange,
