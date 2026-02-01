@@ -64,4 +64,30 @@ class ZaposleniUslugaController extends Controller
             ], 500);
         }
     }
+
+
+     
+    public function mojeUsluge()
+    {
+        try {
+            $user = Auth::user();
+            if (!$user->isZaposleni()) {
+                return response()->json([
+                    'success' => false, 
+                    'message' => 'Ova opcija je dostupna samo zaposlenima.'
+                ], 403);
+            }
+
+           
+            $usluge = $this->zaposleniService->getUslugeZaposlenog($user->id);
+            return UslugaResource::collection($usluge);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false, 
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }
