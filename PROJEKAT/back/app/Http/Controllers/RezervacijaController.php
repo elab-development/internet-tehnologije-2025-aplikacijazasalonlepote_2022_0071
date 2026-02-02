@@ -66,4 +66,28 @@ class RezervacijaController extends Controller
 }
     
 
+
+    public function rezervacijeKlijenta()
+    {
+        try{
+            $this->proveraKlijenta();
+            $rezervacije = $this->manager->rezervacijeKlijenta(Auth::user());
+            return RezervacijaResource::collection($rezervacije);
+        }catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Došlo je do greške prilikom prikaza rezervacija ulogovanog klijenta.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        
+    }
+
+
+     private function proveraKlijenta(){
+        if (!Auth::user()->isKlijent()) {
+                throw new Exception("Pristup zabranjen. Samo klijent može vršiti ovu akciju.", 403);
+            }
+    }
+
 }

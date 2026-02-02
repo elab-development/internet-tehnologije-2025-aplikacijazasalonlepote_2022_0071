@@ -105,6 +105,16 @@ class RezervacijaManager
     }
 
 
+
+    public function rezervacijeKlijenta($klijent)
+{
+    return Rezervacija::where('klijent_id', $klijent->id)
+    ->with(['usluga', 'zaposleni.user'])
+    ->orderBy('status', 'asc') 
+    ->orderBy('vreme_od', 'desc')
+    ->get();
+}
+
    
 
 }

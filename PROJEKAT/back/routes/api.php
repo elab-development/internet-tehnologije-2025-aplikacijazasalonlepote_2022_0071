@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
           Route::prefix('klijent')->group(function () {
             Route::post('/rezervacije', [RezervacijaController::class, 'store']);
+            Route::get('/rezervacije/moje-rezervacije', [RezervacijaController::class, 'rezervacijeKlijenta']);
           });
 
 });
