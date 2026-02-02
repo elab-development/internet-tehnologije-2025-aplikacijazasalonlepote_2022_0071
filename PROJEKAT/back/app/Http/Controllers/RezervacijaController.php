@@ -84,6 +84,25 @@ class RezervacijaController extends Controller
     }
 
 
+    
+public function destroy($id)
+{
+    try {
+        $this->manager->otkaziRezervaciju($id, Auth::user());
+        return response()->json([
+            'success' => true, 
+            'message' => 'Rezervacija uspešno otkazana. Zaposleni je obavešten.'
+        ]);
+    } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Došlo je do greške prilikom otkazivanja termina rezervacije.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+}
+
+
      private function proveraKlijenta(){
         if (!Auth::user()->isKlijent()) {
                 throw new Exception("Pristup zabranjen. Samo klijent može vršiti ovu akciju.", 403);

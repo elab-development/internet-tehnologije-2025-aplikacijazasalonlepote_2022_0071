@@ -115,6 +115,35 @@ class RezervacijaManager
     ->get();
 }
 
+
+ public function otkaziRezervaciju($id, $user)
+    {
+        return DB::transaction(function () use ($id, $user) {
+           
+            $rezervacija = Rezervacija::with(['usluga', 'zaposleni.user', 'klijent'])->findOrFail($id);
+            if ($rezervacija->klijent_id !== $user->id) {
+                throw new Exception("Nemate ovlašćenje da otkažete ovu rezervaciju.");
+            }
+
+            if ($rezervacija->vreme_od->isPast()) {
+                throw new Exception("Ne možete otkazati termin koji je već prošao.");
+            }
+
+            if ($rezervacija->status === 'otkazana') {
+                throw new Exception("Ova rezervacija je već otkazana.");
+            }
+       
+            $rezervacija->update(['status' => 'otkazana']);
+            $this->posaljiObavestenjaObemaStranama(
+                $rezervacija,
+                "Otkazivanje rezervacije",
+                "Uspešno ste otkazali vaš termin.",
+                "Otkazan termin u vašem rasporedu",
+                "Klijent je otkazao zakazani termin."
+            );
+            return $rezervacija;
+        });
+    }
    
 
 }
