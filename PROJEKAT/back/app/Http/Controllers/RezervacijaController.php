@@ -103,9 +103,43 @@ public function destroy($id)
 }
 
 
+
+public function dnevniRasporedObaveza(Request $request)
+{
+    try {
+       $this->proveraZaposlenog();
+        $request->validate([
+        'datum' => 'nullable|date_format:Y-m-d',
+         ]);
+        $datum = $request->query('datum', now()->format('Y-m-d'));
+        $rezervacije = $this->rezervacijaService->dohvatiRasporedZaZaposlenog(Auth::user(), $datum);
+        if ($rezervacije->isEmpty()) {
+            return response()->json([
+                'success' => true,
+                'data' => [],
+                'message' => 'Trenutno nemate nijednu obavezu za ovaj dan. Uživajte!'
+            ]);
+        }
+        return RezervacijaResource::collection($rezervacije);
+    } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Greška pri učitavanju rasporeda.',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
+
      private function proveraKlijenta(){
         if (!Auth::user()->isKlijent()) {
                 throw new Exception("Pristup zabranjen. Samo klijent može vršiti ovu akciju.", 403);
+            }
+    }
+
+      private function proveraZaposlenog(){
+        if (!Auth::user()->isZaposleni()) {
+                throw new Exception("Pristup zabranjen. Samo zaposleni može vršiti ovu akciju.", 403);
             }
     }
 

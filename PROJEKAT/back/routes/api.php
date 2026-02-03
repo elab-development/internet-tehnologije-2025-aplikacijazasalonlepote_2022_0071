@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
          Route::prefix('zaposleni')->group(function () {
            Route::get('/moje-usluge', [ZaposleniUslugaController::class, 'mojeUsluge']);
+            Route::get('/rezervacije/moj-raspored-obaveza', [RezervacijaController::class, 'dnevniRasporedObaveza']);
          });
 
           Route::prefix('klijent')->group(function () {

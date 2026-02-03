@@ -107,5 +107,16 @@ class RezervacijaService
     }
 
 
+     public function dohvatiRasporedZaZaposlenog($user, $datum)
+{
+    return Rezervacija::where('zaposleni_id', $user->id)
+        ->whereDate('vreme_od', $datum)
+        ->where('status', 'potvrdjena') 
+        ->with(['usluga', 'klijent'])    
+        ->orderBy('vreme_od', 'asc')    
+        ->get();
+}
+
+
 
 }
