@@ -2,12 +2,24 @@ import { useState, useEffect } from "react";
 import api from "../api";
 
 export const useBookings = () => {
+  const [bookings, setBookings] = useState([]);
   const [timeSlots, setTimeSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [error, setError] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
 
+  const fetchBookings = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/klijent/rezervacije/moje-rezervacije");
+      setBookings(response.data.data);
+    } catch (err) {
+      setError("Greška pri učitavanju rezervacija");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchAvailableSlots = async (serviceId, selectedDate) => {
     if (!serviceId || !selectedDate) return;
@@ -45,11 +57,25 @@ export const useBookings = () => {
     }
   };
 
-  
+  const cancelBooking = async (id) => {
+    try {
+      await api.delete(`/klijent/rezervacije/otkazi-rezervaciju/${id}`);
+      await fetchBookings();
+      return { success: true };
+    } catch (err) {
+      return {
+        success: false,
+        message: err.response?.data?.message || "Greška pri otkazivanju",
+      };
+    }
+  };
 
- 
+  useEffect(() => {
+    fetchBookings();
+  }, []);
 
   return {
+    bookings,
     timeSlots,
     loading,
     loadingSlots,
@@ -58,5 +84,7 @@ export const useBookings = () => {
     setSelectedService,
     fetchAvailableSlots,
     bookTermin,
+    cancelBooking,
+    refresh: fetchBookings,
   };
 };

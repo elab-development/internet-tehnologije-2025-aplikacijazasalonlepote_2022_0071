@@ -13,6 +13,7 @@ import ServicesList from "./pages/ServicesList";
 import EditService from "./pages/EditService";
 import CreateService from "./pages/CreateService";
 import EmployeesList from "./pages/EmployeesList";
+import ClientBookings from "./pages/ClientBookings";
 
 
 function App() {
@@ -41,6 +42,8 @@ function App() {
             <Route path="/services/edit" element={<EditService />} />
              <Route path="/create-service" element={<CreateService />} />
               <Route path="/employees" element={<EmployeesList />} />
+            <Route path="/my-bookings" element={<ClientBookings />} />
+
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
