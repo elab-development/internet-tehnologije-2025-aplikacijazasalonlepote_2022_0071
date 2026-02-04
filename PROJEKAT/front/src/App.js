@@ -14,7 +14,7 @@ import EditService from "./pages/EditService";
 import CreateService from "./pages/CreateService";
 import EmployeesList from "./pages/EmployeesList";
 import ClientBookings from "./pages/ClientBookings";
-
+import EmployeeDailySchedule from "./pages/EmployeeDailySchedule";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -43,6 +43,10 @@ function App() {
              <Route path="/create-service" element={<CreateService />} />
               <Route path="/employees" element={<EmployeesList />} />
             <Route path="/my-bookings" element={<ClientBookings />} />
+            <Route
+              path="/my-daily-schedule"
+              element={<EmployeeDailySchedule />}
+            />
 
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

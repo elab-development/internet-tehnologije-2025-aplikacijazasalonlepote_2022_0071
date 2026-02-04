@@ -36,9 +36,9 @@ const BookingCard = ({ booking, onCancel, variant = "client" }) => {
                   {booking.usluga.naziv}
                 </h3>
                 <p className="text-gray-400 text-[11px] font-bold uppercase tracking-tight mt-1">
-                  {booking.usluga.trajanje} min •{" "}
+                  {booking.usluga.trajanje} {" "}
                   <span className="text-pink-900">
-                    {booking.usluga.cena} RSD
+                    {booking.usluga.cena}
                   </span>
                 </p>
               </div>
@@ -112,10 +112,10 @@ const BookingCard = ({ booking, onCancel, variant = "client" }) => {
                 Usluga
               </p>
               <p className="text-sm font-bold text-gray-800">
-                {booking.usluga.cena} RSD
+                {booking.usluga.cena}
               </p>
               <p className="text-[11px] text-gray-500">
-                {booking.usluga.trajanje} min
+                {booking.usluga.trajanje}
               </p>
             </div>
           </div>

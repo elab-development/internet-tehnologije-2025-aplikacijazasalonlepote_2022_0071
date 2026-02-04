@@ -8,6 +8,8 @@ export const useBookings = () => {
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [error, setError] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
+  const [dailySchedule, setDailySchedule] = useState([]);
+  const [scheduleMessage, setScheduleMessage] = useState("");
 
   const fetchBookings = async () => {
     setLoading(true);
@@ -39,6 +41,21 @@ export const useBookings = () => {
     }
   };
 
+  const fetchDailySchedule = async (date) => {
+    setLoading(true);
+    try {
+      const response = await api.get(
+        `/zaposleni/rezervacije/moj-raspored-obaveza?datum=${date}`
+      );
+      setDailySchedule(response.data.data);
+      setScheduleMessage(response.data.message || "");
+    } catch (err) {
+      console.error("Greška pri učitavanju rasporeda");
+      setDailySchedule([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const bookTermin = async (bookingData) => {
     try {
@@ -77,6 +94,8 @@ export const useBookings = () => {
   return {
     bookings,
     timeSlots,
+    dailySchedule,
+    scheduleMessage,
     loading,
     loadingSlots,
     error,
@@ -86,5 +105,6 @@ export const useBookings = () => {
     bookTermin,
     cancelBooking,
     refresh: fetchBookings,
+    fetchDailySchedule,
   };
 };
