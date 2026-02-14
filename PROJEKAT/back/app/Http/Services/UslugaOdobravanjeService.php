@@ -41,5 +41,20 @@ class UslugaOdobravanjeService
         return $rezultat;
     }
 
+     public function prihvati(int $izmenaId)
+    {
+        return DB::transaction(function () use ($izmenaId) {
+            $molba = UslugaIzmena::with(['zaposleni', 'usluga'])->findOrFail($izmenaId);
+            $usluga = $this->uslugaService->odobriIzmenu($izmenaId);
+            $this->emailService->posaljiObavestenje(
+                $molba->zaposleni->email,
+                "Vaš predlog je ODOBREN",
+                "Vlasnica je prihvatila vaše izmene za uslugu: {$usluga->naziv}."
+            );
+
+            return $usluga;
+        });
+    }
+
    
 }

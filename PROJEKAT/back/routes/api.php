@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
           Route::get('/zaposleni/{id}/usluge', [ZaposleniUslugaController::class, 'show']);
           Route::post('/zaposleni/usluge', [ZaposleniUslugaController::class, 'store']);
            Route::get('/usluge-izmene', [UslugaController::class, 'indexIzmene']);
+          Route::post('/usluge-izmene/{id}/odobri', [UslugaController::class, 'odobriMolbu']);
          });
 
 

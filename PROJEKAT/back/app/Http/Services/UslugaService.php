@@ -94,5 +94,17 @@ class UslugaService
             ->get();
     }
 
+
+      public function odobriIzmenu(int $izmenaId)
+    {
+        return \DB::transaction(function () use ($izmenaId) {
+            $izmena = UslugaIzmena::findOrFail($izmenaId);
+            $usluga = Usluga::findOrFail($izmena->usluga_id);
+            $usluga->update($izmena->novi_podaci);
+            $izmena->update(['status' => 'odobreno']);
+            return $usluga;
+        });
+    }
+
    
 }

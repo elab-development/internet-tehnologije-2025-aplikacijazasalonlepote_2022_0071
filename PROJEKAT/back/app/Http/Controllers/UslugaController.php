@@ -107,6 +107,22 @@ class UslugaController extends Controller
         }
     }
 
+     public function odobriMolbu($id)
+    {
+        try {
+            $this->proveriVlasnicu();
+            $usluga = $this->odobravanjeService->prihvati($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Izmena je odobrena. Zaposleni je obavešten putem email-a.',
+                'data' => new UslugaResource($usluga)
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+
 
       private function proveriVlasnicu()
     {
