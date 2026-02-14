@@ -106,6 +106,28 @@ export const useServices = (initialFilters) => {
     }
   };
 
+  
+  const handleServiceRequest = async (id, action) => {
+    try {
+      const response = await api.post(
+        `/vlasnica/usluge-izmene/${id}/${action}`,
+      );
+      if (response.data.success) {
+        if (action === "odobri") {
+          await fetchRequests();
+        } else {
+          setRequests((prev) => prev.filter((req) => req.id !== id));
+        }
+        return { success: true, message: response.data.message };
+      }
+    } catch (err) {
+      return {
+        success: false,
+        message: err.response?.data?.message || `Greška pri akciji: ${action}`,
+      };
+    }
+  };
+
   return {
     services,
     meta,
@@ -121,7 +143,8 @@ export const useServices = (initialFilters) => {
     handlePageChange,
     createService,
     updateService,
-    fetchRequests
+    fetchRequests,
+    handleServiceRequest,
 
   };
 };

@@ -1,16 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useServices } from "../hooks/useServices";
+import Alert from "../components/Alert";
 import ServiceRequestCard from "../components/ServiceRequestCard";
 
 const ServiceRequests = () => {
-  const { requests, fetchRequests, loading } =
+  const { requests, fetchRequests, handleServiceRequest, loading } =
     useServices();
+  const [submittingId, setSubmittingId] = useState(null);
+  const [statusMsg, setStatusMsg] = useState({ text: "", type: "" });
 
   useEffect(() => {
     fetchRequests();
   }, []);
 
- 
+  const processAction = async (id, action) => {
+    setSubmittingId(id);
+    setStatusMsg({ text: "", type: "" });
+
+    const result = await handleServiceRequest(id, action);
+
+    if (result.success) {
+      setStatusMsg({ text: result.message, type: "success" });
+      setTimeout(() => setStatusMsg({ text: "", type: "" }), 4000);
+    } else {
+      setStatusMsg({ text: result.message, type: "error" });
+    }
+    setSubmittingId(null);
+  };
 
   if (loading && requests.length === 0)
     return (
@@ -29,11 +45,17 @@ const ServiceRequests = () => {
           Molbe za Izmenu
         </h1>
         <p className="text-gray-500 italic font-light">
-          Pregledajte predloge vaših zaposlenih za unapređenje usluga
+          Pregledajte i odobrite predloge vaših zaposlenih za unapređenje usluga
         </p>
       </div>
 
-
+      {statusMsg.text && (
+        <Alert
+          type={statusMsg.type}
+          message={statusMsg.text}
+          className="mb-8 shadow-sm border-pink-100"
+        />
+      )}
 
       {requests.length > 0 ? (
         <div className="grid grid-cols-1 gap-8">
@@ -41,6 +63,9 @@ const ServiceRequests = () => {
             <ServiceRequestCard
               key={req.id}
               req={req}
+              onAccept={(id) => processAction(id, "odobri")}
+              onReject={(id) => processAction(id, "odbij")}
+              isSubmitting={submittingId === req.id}
             />
           ))}
         </div>

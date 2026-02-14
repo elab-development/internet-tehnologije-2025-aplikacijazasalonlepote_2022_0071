@@ -2,10 +2,12 @@ import React from "react";
 import Button from "./Button";
 import ServiceDataList from "./ServiceDataList";
 
-const ServiceRequestCard = ({ req }) => {
+const ServiceRequestCard = ({ req, onAccept, onReject, isSubmitting }) => {
   return (
     <div
-      className={`bg-white rounded-[2rem] shadow-xl border border-pink-50 overflow-hidden transition-opacity`}
+      className={`bg-white rounded-[2rem] shadow-xl border border-pink-50 overflow-hidden transition-opacity ${
+        isSubmitting ? "opacity-50 pointer-events-none" : "opacity-100"
+      }`}
     >
       <div className="bg-gray-50 px-8 py-4 border-b border-pink-50 flex justify-between items-center">
         <div>
@@ -33,7 +35,23 @@ const ServiceRequestCard = ({ req }) => {
         />
       </div>
 
-
+      <div className="bg-pink-50/30 px-8 py-6 flex flex-col sm:flex-row gap-4 justify-end border-t border-pink-50">
+        <Button
+          variant="outline"
+          className="!border-red-200 !text-red-600 hover:!bg-red-50"
+          onClick={() => onReject(req.id)}
+          isLoading={isSubmitting}
+        >
+          ODBIJ MOLBU
+        </Button>
+        <Button
+          onClick={() => onAccept(req.id)}
+          className="!bg-emerald-700 hover:!bg-emerald-800"
+          disabled={isSubmitting}
+        >
+          PRIHVATI I AŽURIRAJ USLUGU
+        </Button>
+      </div>
     </div>
   );
 };
