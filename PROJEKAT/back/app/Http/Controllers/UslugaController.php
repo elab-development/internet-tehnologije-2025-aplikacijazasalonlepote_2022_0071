@@ -123,6 +123,21 @@ class UslugaController extends Controller
         }
     }
 
+    
+       public function odbijMolbu($id)
+    {
+        try {
+            $this->proveriVlasnicu();
+            $this->odobravanjeService->odbaci($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Predlog izmene je odbijen. Zaposleni je obavešten putem email-a.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
 
       private function proveriVlasnicu()
     {

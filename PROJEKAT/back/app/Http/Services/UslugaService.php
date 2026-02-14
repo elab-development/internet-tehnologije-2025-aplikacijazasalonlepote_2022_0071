@@ -106,5 +106,13 @@ class UslugaService
         });
     }
 
+
+        public function odbijIzmenu(int $izmenaId)
+    {
+        $izmena = UslugaIzmena::findOrFail($izmenaId);
+        return $izmena->update(['status' => 'odbijeno']);
+    
+    }
+
    
 }

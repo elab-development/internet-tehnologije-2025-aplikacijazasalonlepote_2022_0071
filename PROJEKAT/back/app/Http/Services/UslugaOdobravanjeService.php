@@ -56,5 +56,20 @@ class UslugaOdobravanjeService
         });
     }
 
+       public function odbaci(int $izmenaId)
+    {
+        return DB::transaction(function () use ($izmenaId) {
+            $molba = UslugaIzmena::with(['zaposleni', 'usluga'])->findOrFail($izmenaId);
+            $this->uslugaService->odbijIzmenu($izmenaId);
+            $this->emailService->posaljiObavestenje(
+                $molba->zaposleni->email,
+                "Vaš predlog je ODBIJEN",
+                "Vlasnica je odbila predlog izmene za uslugu: {$molba->usluga->naziv}."
+            );
+            
+            return true;
+        });
+    }
+
    
 }
