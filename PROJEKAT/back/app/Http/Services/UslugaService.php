@@ -82,5 +82,17 @@ class UslugaService
     {
         return Usluga::create($data);
     }
+
+
+    
+    public function getSveIzmeneNaCekanju()
+    {
+    
+        return UslugaIzmena::with(['zaposleni', 'usluga'])
+            ->where('status', 'na_cekanju')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
    
 }

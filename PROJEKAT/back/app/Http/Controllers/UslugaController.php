@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UslugaFilterRequest;
 use App\Http\Requests\UpdateUslugaRequest;
 use App\Http\Requests\UslugaRequest;
+use App\Http\Resources\UslugaIzmenaResource;
 use App\Http\Resources\UslugaResource;
 use App\Http\Services\UslugaService;
 use App\Http\Services\UslugaOdobravanjeService;
@@ -85,6 +86,32 @@ class UslugaController extends Controller
                 'message' => 'Došlo je do greške prilikom kreiranja usluge.',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+
+       public function indexIzmene()
+    {
+        try {
+        
+            $this->proveriVlasnicu();
+            $izmene = $this->uslugaService->getSveIzmeneNaCekanju();
+
+            return UslugaIzmenaResource::collection($izmene);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+      private function proveriVlasnicu()
+    {
+        if (!Auth::user()->isVlasnica()) {
+            throw new Exception("Pristup zabranjen. Samo vlasnica može vršiti ovu akciju.", 403);
         }
     }
 
