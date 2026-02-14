@@ -8,7 +8,7 @@ export const useServices = (initialFilters) => {
   const [absoluteMaxPrice, setAbsoluteMaxPrice] = useState(0);
   const [filters, setFilters] = useState(initialFilters);
   const [activeTab, setActiveTab] = useState("all");
-
+  const [requests, setRequests] = useState([]);
   const fetchServices = async () => {
     setLoading(true);
     try {
@@ -94,6 +94,17 @@ export const useServices = (initialFilters) => {
     }
   };
 
+   const fetchRequests = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/vlasnica/usluge-izmene");
+      setRequests(response.data.data);
+    } catch (err) {
+      console.error("Greška pri učitavanju molbi", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
     services,
@@ -102,12 +113,15 @@ export const useServices = (initialFilters) => {
     absoluteMaxPrice,
     filters,
     activeTab,
+    requests,
     setActiveTab,
     fetchServices,
     setFilters,
     handleFilterChange,
     handlePageChange,
     createService,
-    updateService
+    updateService,
+    fetchRequests
+
   };
 };

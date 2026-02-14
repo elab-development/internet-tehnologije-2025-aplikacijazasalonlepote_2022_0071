@@ -14,6 +14,7 @@ const Navbar = ({ onLogout }) => {
       { name: "Usluge", path: "/services" },
       { name: "Kreiraj Uslugu", path: "/create-service" },
       { name: "Zaposleni", path: "/employees" },
+      { name: "Molbe Zaposlenih", path: "/service-requests" },
     ],
     klijent: [
       { name: "Usluge", path: "/services" },
