@@ -6,6 +6,8 @@ import Pagination from "../components/Pagination";
 import FormInput from "../components/FormInput";
 import FormSelect from "../components/FormSelect";
 import EmployeeServicesModal from "../components/EmployeeServicesModal";
+import EmployeeScheduleModal from "../components/EmployeeScheduleModal";
+import AssignScheduleModal from "../components/AssignScheduleModal";
 import { useNavigate } from "react-router-dom";
 
 const EmployeesList = () => {
@@ -15,11 +17,15 @@ const EmployeesList = () => {
     loading,
     filters,
     setFilters,
-    setSelectedEmployee,
-    selectedEmployee,
     searchIme,
     searchPrezime,
     handleFilterChange,
+    selectedEmployee,
+    setSelectedEmployee,
+    scheduleEmployee,
+    setScheduleEmployee,
+    assigningEmployee,
+    setAssigningEmployee,
   } = useEmployees({
     ime: "",
     prezime: "",
@@ -107,15 +113,32 @@ const EmployeesList = () => {
               <EmployeeCard
                 key={emp.id}
                 employee={emp}
-                 onViewServices={() => setSelectedEmployee(emp)}
+                onViewServices={() => setSelectedEmployee(emp)}
+                onViewSchedule={() => setScheduleEmployee(emp)}
               />
             ))}
           </div>
 
-           {selectedEmployee && (
+          {selectedEmployee && (
             <EmployeeServicesModal
               employee={selectedEmployee}
               onClose={() => setSelectedEmployee(null)}
+            />
+          )}
+          {scheduleEmployee && (
+            <EmployeeScheduleModal
+              employee={scheduleEmployee}
+              onClose={() => setScheduleEmployee(null)}
+              onAssignNew={(emp) => {
+                setScheduleEmployee(null);
+                setAssigningEmployee(emp);
+              }}
+            />
+          )}
+          {assigningEmployee && (
+            <AssignScheduleModal
+              employee={assigningEmployee}
+              onClose={() => setAssigningEmployee(null)}
             />
           )}
 

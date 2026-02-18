@@ -5,10 +5,13 @@ export const useEmployees = (initialFilters) => {
   const [employees, setEmployees] = useState([]);
   const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
- const [selectedEmployee, setSelectedEmployee] = useState(null);
+
   const [searchIme, setSearchIme] = useState("");
   const [searchPrezime, setSearchPrezime] = useState("");
 
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [scheduleEmployee, setScheduleEmployee] = useState(null);
+  const [assigningEmployee, setAssigningEmployee] = useState(null);
 
   const [filters, setFilters] = useState(initialFilters);
 
@@ -50,7 +53,7 @@ export const useEmployees = (initialFilters) => {
     else setFilters((prev) => ({ ...prev, [name]: value, page: 1 }));
   };
 
-   const getEmployeeServices = async (employeeId) => {
+  const getEmployeeServices = async (employeeId) => {
     try {
       const response = await api.get(
         `/vlasnica/zaposleni/${employeeId}/usluge`,
@@ -81,7 +84,6 @@ export const useEmployees = (initialFilters) => {
     }
   };
 
-
   return {
     employees,
     meta,
@@ -91,12 +93,14 @@ export const useEmployees = (initialFilters) => {
     searchIme,
     searchPrezime,
     handleFilterChange,
-     getEmployeeServices,
-    updateEmployeeServices,
-      selectedEmployee,
+    selectedEmployee,
     setSelectedEmployee,
+    scheduleEmployee,
+    setScheduleEmployee,
+    assigningEmployee,
+    setAssigningEmployee,
     refresh: fetchEmployees,
-    
-
+    getEmployeeServices,
+    updateEmployeeServices,
   };
 };
