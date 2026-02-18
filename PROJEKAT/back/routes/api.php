@@ -7,6 +7,7 @@ use App\Http\Controllers\UslugaController;
 use App\Http\Controllers\ZaposleniController;
 use App\Http\Controllers\ZaposleniUslugaController;
 use App\Http\Controllers\RezervacijaController;
+use App\Http\Controllers\RadnoVremeController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -28,6 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
            Route::get('/usluge-izmene', [UslugaController::class, 'indexIzmene']);
           Route::post('/usluge-izmene/{id}/odobri', [UslugaController::class, 'odobriMolbu']);
            Route::post('/usluge-izmene/{id}/odbij', [UslugaController::class, 'odbijMolbu']);
+            Route::post('/radno-vreme', [RadnoVremeController::class, 'store']);
+            Route::get('/radno-vreme/raspored/{zaposleniId}', [RadnoVremeController::class, 'nedeljniRasporedZaposlenog']);
          });
 
 
