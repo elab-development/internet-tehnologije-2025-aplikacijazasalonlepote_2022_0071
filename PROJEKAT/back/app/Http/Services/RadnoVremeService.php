@@ -39,4 +39,25 @@ class RadnoVremeService
         ->orderByRaw('CASE WHEN dan_u_nedelji = 0 THEN 7 ELSE dan_u_nedelji END')
         ->get();
 }
+
+public function getNedeljniRaspored(): Collection
+    {
+        return RadnoVreme::with('zaposleni') 
+            ->where('radi', true) 
+            ->orderByRaw('CASE WHEN dan_u_nedelji = 0 THEN 7 ELSE dan_u_nedelji END')
+            ->orderBy('vreme_od') 
+            ->get()
+            ->groupBy(function ($item) {
+                $dani = [
+                    0 => 'Nedelja',
+                    1 => 'Ponedeljak',
+                    2 => 'Utorak',
+                    3 => 'Sreda',
+                    4 => 'Četvrtak',
+                    5 => 'Petak',
+                    6 => 'Subota'
+                ];
+                return $dani[$item->dan_u_nedelji];
+            });
+    }
 }

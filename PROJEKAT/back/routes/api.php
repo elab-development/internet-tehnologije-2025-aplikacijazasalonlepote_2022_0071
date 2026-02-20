@@ -31,10 +31,12 @@ Route::middleware('auth:sanctum')->group(function () {
            Route::post('/usluge-izmene/{id}/odbij', [UslugaController::class, 'odbijMolbu']);
             Route::post('/radno-vreme', [RadnoVremeController::class, 'store']);
             Route::get('/radno-vreme/raspored/{zaposleniId}', [RadnoVremeController::class, 'nedeljniRasporedZaposlenog']);
+              Route::get('/radno-vreme/raspored', [RadnoVremeController::class, 'index']);
          });
 
 
          Route::prefix('zaposleni')->group(function () {
+          Route::get('/moj-raspored-smena', [RadnoVremeController::class, 'mojRaspored']);
            Route::get('/moje-usluge', [ZaposleniUslugaController::class, 'mojeUsluge']);
             Route::get('/rezervacije/moj-raspored-obaveza', [RezervacijaController::class, 'dnevniRasporedObaveza']);
          });
