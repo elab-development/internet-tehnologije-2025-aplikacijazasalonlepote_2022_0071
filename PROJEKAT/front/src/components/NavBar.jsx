@@ -13,15 +13,18 @@ const Navbar = ({ onLogout }) => {
     vlasnica: [
       { name: "Usluge", path: "/services" },
       { name: "Kreiraj Uslugu", path: "/create-service" },
-      { name: "Zaposleni", path: "/employees" },
       { name: "Molbe Zaposlenih", path: "/service-requests" },
+      { name: "Zaposleni", path: "/employees" },
+      { name: "Nedeljni Raspored", path: "/schedule" },
     ],
     klijent: [
       { name: "Usluge", path: "/services" },
       { name: "Moje Rezervacije", path: "/my-bookings" },
+      { name: "Lokacija", path: "/location" },
     ],
     zaposleni: [
       { name: "Usluge", path: "/services" },
+      { name: "Moj Raspored", path: "/employee-schedule" },
       { name: "Moje Dnevne Obaveze", path: "/my-daily-schedule" },
     ],
   };
