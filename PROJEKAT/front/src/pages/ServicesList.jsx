@@ -1,26 +1,29 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useServices } from "../hooks/useServices";
 import Alert from "../components/Alert";
 import ServiceHeader from "../components/ServiceHeader";
 import ServiceCard from "../components/ServiceCard";
 import Pagination from "../components/Pagination";
-import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-import { useBookings } from "../hooks/useBookings";
 import BookingModal from "../components/BookingModal";
+import { useAuth } from "../hooks/useAuth";
 import Button from "../components/Button";
+import { useBookings } from "../hooks/useBookings";
+import { useExchangeRates } from "../hooks/useExchangeRates";
 
 const ServicesList = () => {
-  const { getUserData } = useAuth();
   const navigate = useNavigate();
+  const { getUserData } = useAuth();
+
   const user = getUserData();
+
   const isEmployee = ["sminkerka", "manikirka"].includes(user.type);
 
   const {
     services,
     meta,
     loading,
-     activeTab,
+    activeTab,
     setActiveTab,
     absoluteMaxPrice,
     filters,
@@ -34,30 +37,58 @@ const ServicesList = () => {
     kategorija: "",
   });
 
+  const { selectedService, setSelectedService } = useBookings();
 
- const { selectedService, setSelectedService } = useBookings();
+  const { rates, selectedCurrency, setSelectedCurrency } = useExchangeRates();
+
+  const popularCurrencies = [
+    "RSD",
+    "EUR",
+    "USD",
+    "GBP",
+    "CHF",
+    "AUD",
+    "CAD",
+    "JPY",
+    "HRK",
+    "BAM",
+    "HUF",
+    "SEK",
+    "NOK",
+    "TRY",
+    "RUB",
+    "CNY",
+    "AED",
+    "KWD",
+    "PLN",
+    "DKK",
+  ];
+
   const getButtonProps = () => {
     if (user.type === "vlasnica") return "IZMENI";
-    else if (user.type === "klijent") return "ZAKAZI";
+    if (isEmployee) {
+      return activeTab === "mine" ? "PREDLOŽI IZMENU" : "";
+    }
+    return "ZAKAŽI";
   };
 
   const handleAction = (service) => {
-     if (user.type === "vlasnica") 
+    if (["vlasnica", "sminkerka", "manikirka"].includes(user.type)) {
       navigate(`/services/edit`, { state: { service } });
-    else {
+    } else {
       setSelectedService(service);
     }
   };
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-       {isEmployee && (
+      {isEmployee && (
         <div className="flex gap-4 mb-6 bg-white p-2 rounded-2xl w-fit shadow-sm border border-pink-50">
           {["all", "mine"].map((tab) => (
             <Button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              variant={activeTab === tab ? "default" : "outline"}
+              variant={activeTab === tab ? "primary" : "outline"}
               className={`!rounded-xl !px-6 !py-2 !text-sm !font-bold !border-none ${
                 activeTab !== tab ? "!text-gray-400 hover:!text-pink-800" : ""
               }`}
@@ -73,6 +104,11 @@ const ServicesList = () => {
           filters={filters}
           onFilterChange={handleFilterChange}
           maxPrice={absoluteMaxPrice}
+          currencies={popularCurrencies}
+          selectedCurrency={selectedCurrency}
+          onCurrencyChange={setSelectedCurrency}
+          rate={rates[selectedCurrency] || 1}
+          userType={user.type}
         />
       ) : (
         <div className="mb-10 bg-white p-10 rounded-[2rem] border border-pink-50 shadow-sm">
@@ -96,11 +132,13 @@ const ServicesList = () => {
                 service={service}
                 onAction={() => handleAction(service)}
                 actionLabel={getButtonProps()}
+                currency={selectedCurrency}
+                rate={rates[selectedCurrency] || 1}
               />
             ))}
           </div>
 
-             {selectedService && (
+          {selectedService && (
             <BookingModal
               service={selectedService}
               onClose={() => setSelectedService(null)}
@@ -111,7 +149,6 @@ const ServicesList = () => {
         </>
       ) : (
         <Alert
-          type="info"
           variant="panel"
           message="Nema pronađenih usluga"
           description="Pokušajte da promenite filtere pretrage."
