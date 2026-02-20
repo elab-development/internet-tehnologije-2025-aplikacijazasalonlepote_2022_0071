@@ -16,6 +16,7 @@ import EmployeesList from "./pages/EmployeesList";
 import ClientBookings from "./pages/ClientBookings";
 import EmployeeDailySchedule from "./pages/EmployeeDailySchedule";
 import ServiceRequests from "./pages/ServiceRequests";
+import Location from "./pages/Location";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!sessionStorage.getItem("token"),
@@ -48,6 +49,7 @@ function App() {
               element={<EmployeeDailySchedule />}
             />
             <Route path="/service-requests" element={<ServiceRequests />} />
+             <Route path="/location" element={<Location />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
