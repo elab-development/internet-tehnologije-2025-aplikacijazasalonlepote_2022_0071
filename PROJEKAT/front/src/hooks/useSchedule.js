@@ -8,8 +8,31 @@ export const useSchedule = () => {
   const [myShifts, setMyShifts] = useState([]);
   const [selectedEmployeeSchedule, setSelectedEmployeeSchedule] = useState([]);
 
- 
+  const fetchWeeklySchedule = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.get("/vlasnica/radno-vreme/raspored");
+      setSchedule(response.data.data);
+    } catch (err) {
+      setError("Greška pri učitavanju rasporeda");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const fetchMySchedule = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/zaposleni/moj-raspored-smena");
+      setMyShifts(response.data.data);
+    } catch (err) {
+      console.error("Greška pri učitavanju ličnog rasporeda", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchScheduleByEmployee = async (employeeId) => {
     setLoading(true);
@@ -53,6 +76,8 @@ export const useSchedule = () => {
     myShifts,
     selectedEmployeeSchedule,
     setMyShifts,
+    fetchWeeklySchedule,
+    fetchMySchedule,
     fetchScheduleByEmployee,
     assignSchedule,
   };
